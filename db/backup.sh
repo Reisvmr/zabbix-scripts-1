@@ -52,7 +52,7 @@ if [ ! -f $EXTRAFILE ] || [ "x$EXTRAFILE" == 'x' ]; then
 	exit 1
 fi
 
-# tables with large data
+# tabelas com dados grandes
 DATATABLES=( acknowledges alerts auditlog auditlog_details events event_recovery event_tag \ 
 history history_log history_str history_text history_uint housekeeper \ 
 problem problem_tag sessions trends trends_uint )
@@ -64,9 +64,9 @@ DUMPFILETMP="${TMPDIR}/zbx-conf-bkup-`date +%Y%m%d-%H%M`.sql"
 >"${DUMPFILE}"
 
 TABLES=`mysql --defaults-extra-file=${EXTRAFILE} ${DBNAME} -e 'show tables;' | tail -n +2`
-# configtables, loop through all tables and copy them..
+# configtables, percorra todas as tabelas e copie-as.
 for table in ${TABLES}; do
-	found=0; # ignore large tables like history and stuff
+	found=0; # ignore grandes tabelas como histórico e outras coisas
 	for x in ${DATATABLES[*]}; do
 		[ "$x" == "$table" ] && found=1;
 	done
@@ -76,7 +76,7 @@ for table in ${TABLES}; do
 		${DBNAME} --tables ${table} >>"${DUMPFILETMP}"
 done
 
-# datatables, with history we dont need
+# datatables, com histórico não precisamos
 for table in ${DATATABLES[*]}; do
 		echo "Backuping data table ${table}"
 		mysqldump --defaults-extra-file=${EXTRAFILE} --set-gtid-purged=OFF \
